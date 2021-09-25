@@ -17,6 +17,7 @@ var calendar = new Calendar('#calendar', {
     useCreationPopup: true,
     useDetailPopup: true,
     defaultView: 'week',
+    scheduleView: true,
     taskView: false,
     
     template: {
@@ -33,12 +34,16 @@ var calendar = new Calendar('#calendar', {
     }, 
     week: {
         daynames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-        startDayOfWeek: 0,
+        startDayOfWeek: 1,
         narrowWeekend: true,
         hourStart: 7,
         hourEnd: 20,
+        workweek: false,
+        showTimezoneCollapseButton: false,
         timezonesCollapsed: false,
-    }
+        narrowWeekend: false,
+    },
+
 
 });
 
@@ -53,7 +58,7 @@ calendar.on({
         console.log('beforeCreateSchedule', e);
         console.log("hheeee");
         // open a creation popup
-        console.log("ok ok ", e.start, "ok ok ", e.end);
+        
         var schedule = {
             id: +new Date(),
             calendarId: '1',
@@ -61,11 +66,13 @@ calendar.on({
             isAllDay: false,
             start: e.start,
             end: e.end,
-            category:  'time'
+            category:  'time',
+            bgColor: "#"+ Math.floor(Math.random()*16777215).toString(16),
+            location: e.location
         };
         calendar.createSchedules([schedule]);
 
-        
+        console.log("title", e.title, "start", e.start, "end", e.end);        
 
 
         // If you dont' want to show any popup, just use `e.guide.clearGuideElement()`
@@ -73,6 +80,7 @@ calendar.on({
         // then close guide element(blue box from dragging or clicking days)
         // e.guide.clearGuideElement();
         // calendar.createSchedules([e]);
+
         console.log(calendar._controller.schedules.items);
     },
     'beforeUpdateSchedule': function(e) {
