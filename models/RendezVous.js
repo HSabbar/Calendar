@@ -1,28 +1,28 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const rendezvousSchema = mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'Nom requis'],
+    required: [false, 'Nom requis'],
     minlength: [2, 'Le Nom ne peut pas être inférieur à 2 lettres'],
     maxlength: [64, 'Le Nom ne peut pas dépasser 64 lettres']
   },
   location: {
     type: String,
-    required: [true, 'Nom requis'],
+    required: [false, 'Nom requis'],
     minlength: [2, 'Le Nom ne peut pas être inférieur à 2 lettres'],
     maxlength: [64, 'Le Nom ne peut pas dépasser 64 lettres']
   },
   isAllDay: {
-    type: Boolean,
-    default: false
+    type: String,
+    required: [false, 'Nom requis'],
+    minlength: [2, 'Le Nom ne peut pas être inférieur à 2 lettres'],
+    maxlength: [64, 'Le Nom ne peut pas dépasser 64 lettres']
   },
   state: {
       type: String 
   }
-}, {
-  timestamps: true
-})
+});
 
 // rendezvousSchema.pre('save', async function(next) {
 //   if(! this.isModified('password')) next()
@@ -31,6 +31,6 @@ const rendezvousSchema = mongoose.Schema({
 //   next()
 // })
 
-const rdv = mongoose.model('rendez_vous', rendezvousSchema)
+const rdv = mongoose.model('rendez_vous', rendezvousSchema);
 
-module.exports = rdv
+module.exports = rdv;

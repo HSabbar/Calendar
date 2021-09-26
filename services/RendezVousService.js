@@ -1,14 +1,12 @@
-const Rdv = require('../models/RendezVous')
+const Rdv = require('../models/RendezVous');
 
-/**
- *
- * @param {Object} rendezvousInput - It is user input with all variables for user model
- */
 
-const addRdv = async (rdvInput) => {
-    const rdv = new Rdv(rdvInput)
-    await rdv.save()
-    return rdv
+const addRdv = async function (rdvInput) {
+    console.log(rdvInput);
+    const rdv = new Rdv(rdvInput);
+    console.log(rdv);
+    await rdv.save();
+    return rdv;
 }
 
-module.exports = { addRdv }
+module.exports = { addRdv };

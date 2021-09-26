@@ -1,7 +1,9 @@
 var Calendar  =  require('tui-calendar')
 const moment= require('moment') 
-const { addRdv } = require('../services/RendezVousService')
 require("tui-calendar/dist/tui-calendar.css");
+
+
+
 
 // If you use the default popups, use this.
 require("tui-date-picker/dist/tui-date-picker.css");
@@ -19,8 +21,8 @@ var calendar = new Calendar('#calendar', {
             }
         ]
     },
-    useCreationPopup: true,
-    useDetailPopup: true,
+    useCreationPopup: false,
+    useDetailPopup: false,
     defaultView: 'week',
     scheduleView: true,
     taskView: false,
@@ -35,8 +37,7 @@ var calendar = new Calendar('#calendar', {
         time: function(schedule) {
             return '<strong>' + moment(schedule.start.getTime()).format('HH:mm') + '</strong> ' + schedule.title;
         },
-        popupSave: function(schedule) {
-            
+        popupSave: function() {
         },
         
     }, 
@@ -59,6 +60,7 @@ var calendar = new Calendar('#calendar', {
 calendar.on({
     'clickSchedule': function(e) {
         console.log('clickSchedule', e);
+        
         // e.schedule.title = e.title;
         // calendar.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);
     },
@@ -67,6 +69,7 @@ calendar.on({
         console.log("hheeee");
         // open a creation popup
         
+        modal.style.display = "block";
         var schedule = {
             id: +new Date(),
             calendarId: '1',
@@ -78,8 +81,8 @@ calendar.on({
             bgColor: "#"+ Math.floor(Math.random()*16777215).toString(16),
             location: e.location
         };
-        
-
+        //HTMLFormElement.submit();
+        //addRdv(schedule);
         calendar.createSchedules([schedule]);
 
         console.log("title", e.title, "start", e.start, "end", e.end);        
@@ -111,37 +114,26 @@ calendar.on({
     }
 });
 
-function sendJSON(){
+function sendJSON(body){
                
-    let result = document.querySelector('.result');
-    let name = document.querySelector('#name');
-    let email = document.querySelector('#email');
+
        
     // Creating a XHR object
     let xhr = new XMLHttpRequest();
-    let url = "submit.php";
+    let url = "/calendar";
 
     // open a connection
-    xhr.open("POST", url, true);
+    xhr.open("POST", url);
 
     // Set the request header i.e. which type of content you are sending
     xhr.setRequestHeader("Content-Type", "application/json");
 
     // Create a state change callback
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-
-            // Print received data from server
-            result.innerHTML = this.responseText;
-
-        }
-    };
 
     // Converting JSON data to string
-    var data = JSON.stringify({ "name": name.value, "email": email.value });
-
+   
     // Sending data with the request
-    xhr.send(data);
+    xhr.send(body);
 }
 
 

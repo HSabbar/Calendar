@@ -4,8 +4,6 @@ const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 require('./utils/db.config');
-const { MONGODB } = require('./config');
-
 const app = express();
 
 
@@ -16,8 +14,10 @@ const compiler = webpack(config);
 
 // Tell express to use the webpack-dev-middleware and use the webpack.config.js
 // configuration file as a base.
-app.use(bodyParser.urlencoded({ extended: false }));
+
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: false}));
+
 
 app.use(
   webpackDevMiddleware(compiler, {
