@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const mongoose = require('mongoose');
+require('./utils/db.config');
 const { MONGODB } = require('./config');
 
 const app = express();
@@ -11,6 +11,7 @@ const app = express();
 
 
 const config = require('./webpack.config.js');
+const router = require('./routes/router');
 const compiler = webpack(config);
 
 // Tell express to use the webpack-dev-middleware and use the webpack.config.js
@@ -24,20 +25,15 @@ app.use(
   })
 );
 app.use('/dist', express.static('dist'));
-
+app.use('/', router)
 app.get('/', (req, res) => {
   return res.render('index')
 })
 
 app.get('/calendar', (req, res) => {
+
   return res.render('calendar')
 })
-
-mongoose.connect(MONGODB, { useNewUrlParser: true }).then(() => {
-	console.log('connected to mongodb');
-})
-.then(() => console.log('server running at 3300'))
-.catch(err => console.log(err.message));
 
 // Serve the files on port 3000.
 app.listen(3000, function () {

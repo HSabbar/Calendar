@@ -1,6 +1,11 @@
 var Calendar  =  require('tui-calendar')
 const moment= require('moment') 
+const { addRdv } = require('../services/RendezVousService')
+require("tui-calendar/dist/tui-calendar.css");
 
+// If you use the default popups, use this.
+require("tui-date-picker/dist/tui-date-picker.css");
+require("tui-time-picker/dist/tui-time-picker.css");
 //var Calendar = tui.Calendar;
 
 var calendar = new Calendar('#calendar', {
@@ -29,6 +34,9 @@ var calendar = new Calendar('#calendar', {
         },
         time: function(schedule) {
             return '<strong>' + moment(schedule.start.getTime()).format('HH:mm') + '</strong> ' + schedule.title;
+        },
+        popupSave: function(schedule) {
+            
         },
         
     }, 
@@ -70,6 +78,8 @@ calendar.on({
             bgColor: "#"+ Math.floor(Math.random()*16777215).toString(16),
             location: e.location
         };
+        
+
         calendar.createSchedules([schedule]);
 
         console.log("title", e.title, "start", e.start, "end", e.end);        
@@ -100,5 +110,39 @@ calendar.on({
         calendar.deleteSchedule(e.schedule.id, e.schedule.calendarId);
     }
 });
+
+function sendJSON(){
+               
+    let result = document.querySelector('.result');
+    let name = document.querySelector('#name');
+    let email = document.querySelector('#email');
+       
+    // Creating a XHR object
+    let xhr = new XMLHttpRequest();
+    let url = "submit.php";
+
+    // open a connection
+    xhr.open("POST", url, true);
+
+    // Set the request header i.e. which type of content you are sending
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    // Create a state change callback
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+
+            // Print received data from server
+            result.innerHTML = this.responseText;
+
+        }
+    };
+
+    // Converting JSON data to string
+    var data = JSON.stringify({ "name": name.value, "email": email.value });
+
+    // Sending data with the request
+    xhr.send(data);
+}
+
 
 module.exports = calendar;
