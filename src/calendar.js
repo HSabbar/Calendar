@@ -1,9 +1,8 @@
+/* eslint-disable */
 var Calendar  =  require('tui-calendar')
 const moment= require('moment') 
 require("tui-calendar/dist/tui-calendar.css");
-
-
-
+const $ = require('jquery');
 
 // If you use the default popups, use this.
 require("tui-date-picker/dist/tui-date-picker.css");
@@ -21,8 +20,8 @@ var calendar = new Calendar('#calendar', {
             }
         ]
     },
-    useCreationPopup: false,
-    useDetailPopup: false,
+    useCreationPopup: true,
+    useDetailPopup: true,
     defaultView: 'week',
     scheduleView: true,
     taskView: false,
@@ -37,7 +36,9 @@ var calendar = new Calendar('#calendar', {
         time: function(schedule) {
             return '<strong>' + moment(schedule.start.getTime()).format('HH:mm') + '</strong> ' + schedule.title;
         },
-        popupSave: function() {
+        popupSave: function(e) {
+            
+                
         },
         
     }, 
@@ -56,6 +57,7 @@ var calendar = new Calendar('#calendar', {
 
 });
 
+
 // event handlers
 calendar.on({
     'clickSchedule': function(e) {
@@ -64,26 +66,19 @@ calendar.on({
         // e.schedule.title = e.title;
         // calendar.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);
     },
-    'beforeCreateSchedule': function(e) {
+    'beforeCreateSchedule': async function(e) {
         console.log('beforeCreateSchedule', e);
         console.log("hheeee");
         // open a creation popup
-        
-        modal.style.display = "block";
-        var schedule = {
-            id: +new Date(),
-            calendarId: '1',
-            title: e.title,
-            isAllDay: false,
-            start: e.start,
-            end: e.end,
-            category:  'time',
-            bgColor: "#"+ Math.floor(Math.random()*16777215).toString(16),
-            location: e.location
-        };
-        //HTMLFormElement.submit();
-        //addRdv(schedule);
-        calendar.createSchedules([schedule]);
+     //   modal.style.display = await "block";
+     
+     /*
+     * Perform some validation here.
+     */
+    
+    $.post("/calendar",{title:e.title,location:e.location, isAllDay: "false", state: "Free"});
+    
+      ftft(e);
 
         console.log("title", e.title, "start", e.start, "end", e.end);        
 
@@ -114,26 +109,23 @@ calendar.on({
     }
 });
 
-function sendJSON(body){
+function ftft(e){
                
 
-       
-    // Creating a XHR object
-    let xhr = new XMLHttpRequest();
-    let url = "/calendar";
-
-    // open a connection
-    xhr.open("POST", url);
-
-    // Set the request header i.e. which type of content you are sending
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    // Create a state change callback
-
-    // Converting JSON data to string
-   
-    // Sending data with the request
-    xhr.send(body);
+    var schedule = {
+        id: +new Date(),
+        calendarId: '1',
+        title: e.title,
+        isAllDay: false,
+        start: e.start,
+        end: e.end,
+        category:  'time',
+        bgColor: "#"+ Math.floor(Math.random()*16777215).toString(16),
+        location: e.location
+    };
+    //HTMLFormElement.submit();
+    //addRdv(schedule);
+    calendar.createSchedules([schedule]);
 }
 
 

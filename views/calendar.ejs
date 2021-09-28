@@ -44,7 +44,8 @@
   </head>
 
   <body>
-
+   
+    <p id="test" ><%= message.title %></p>
     <div id="myModal" class="modal">
 
       <!-- Modal content -->
@@ -100,7 +101,7 @@
               required
       >
           </div>
-          <button type="submit" class="">Submit</button>
+          <button class="submit">Submit</button>
         </form>
     
     </div>
@@ -119,6 +120,8 @@
 	<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
   <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
   <script>
+    
+
     var modal = document.getElementById('myModal');
 
 // Get the button that opens the modal
@@ -126,6 +129,7 @@ var btn = document.getElementById("myBtn");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
+var test = document.getElementById("test");
 
 // When the user clicks the button, open the modal 
 //btn.onclick = function() {
@@ -144,8 +148,9 @@ window.onclick = function(event) {
     }
 }
   </script>
-
-    <script src="/dist/calendar.bundle.js"></script>
+ 
+    <script src="../dist/calendar.bundle.js"></script>
+    
    
   </body>
 </html>
