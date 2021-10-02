@@ -22,6 +22,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: false}));
 
 
+
 app.use(
   webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -41,18 +42,24 @@ app.get('/', (req, res) => {
   return res.render('index')
 })
 
-app.get('/calendar',flasherMiddleware, (req, res) => {
-  console.log(req.session.flashData);
-  res.render('calendar');
+app.get('/test/calendar',flasherMiddleware,async (req, res) => {
+  const rdvs = await Rdv.find();
+	req.session.body = rdvs;
+  res.status(200).json(rdvs);
+});
+
+app.get('/calendar',flasherMiddleware,async (req, res) => {
+  const rdvs = await Rdv.find();
+	req.body = rdvs;
+  res.status(200).render('calendar',rdvs);
 });
 
 app.post('/calendar', async (req, res, next) => {
   console.log(req.flashData);
   const body = req.body;
-  const { title, location, isAllDay, state } = body;
+  const { calendarId, title, isAllDay, start, end, category, bgColor, location } = body;
 
-  
-const newRdv = new Rdv({ title, location, isAllDay, state });
+const newRdv = new Rdv({ calendarId, title, isAllDay, start, end, category, bgColor, location });
 try {
   await newRdv.save();
   req.session.flashData = { 

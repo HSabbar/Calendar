@@ -1,9 +1,10 @@
 /* eslint-disable */
 var Calendar  =  require('tui-calendar')
-const moment= require('moment') 
+const moment= require('moment');
+const m = require("tui-calendar/src/js/common/timezone");
 require("tui-calendar/dist/tui-calendar.css");
 const $ = require('jquery');
-
+const veve = 0;
 // If you use the default popups, use this.
 require("tui-date-picker/dist/tui-date-picker.css");
 require("tui-time-picker/dist/tui-time-picker.css");
@@ -57,7 +58,30 @@ var calendar = new Calendar('#calendar', {
 
 });
 
-
+var jsonObj = [];
+$.getJSON('test/calendar',async function(data) {
+    //data is the JSON string
+    //console.log(data);
+    jsonObj = data
+     data.forEach(dt => {
+         var test = ''+dt.start;
+         var test1 = ''+dt.end;
+         
+         dt.start = test;
+         dt.end = test1;
+         console.log(test);
+         console.log(test1);
+         //console.log(dt);
+    }); 
+    
+    
+    console.log(jsonObj);
+    await calendar.createSchedules(data);
+    //calendar.createSchedules(jsonObj);   
+});
+console.log(jsonObj);
+//calendar.createSchedules(jsonObj);
+//calendar.createSchedules(jsonObj);
 // event handlers
 calendar.on({
     'clickSchedule': function(e) {
@@ -71,14 +95,19 @@ calendar.on({
         console.log("hheeee");
         // open a creation popup
      //   modal.style.display = await "block";
-     
-     /*
-     * Perform some validation here.
-     */
+        console.log(typeof (e.start), ""+e.start);
+        $.post("/calendar",{
+            calendarId: '1',
+            title: e.title,
+            isAllDay: "false",
+            start: ''+e.start ,
+            end: ''+e.end,
+            category:  'time',
+            bgColor: "#"+ Math.floor(Math.random()*16777215).toString(16),
+            location: e.location
+        });
     
-    $.post("/calendar",{title:e.title,location:e.location, isAllDay: "false", state: "Free"});
-    
-      ftft(e);
+        ftft(e);
 
         console.log("title", e.title, "start", e.start, "end", e.end);        
 
